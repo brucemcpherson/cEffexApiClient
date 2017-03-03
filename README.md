@@ -1,6 +1,6 @@
 # Google Apps Script Project: cEffexApiClient
 This repo (cEffexApiClient) was automatically created on 03 March 2017 16:53:25 GMT by GasGit
-for more information see the [desktop liberation site](http://ramblings.mcpher.com/Home/excelquirks/drivesdk/gettinggithubready "desktop liberation")
+for more information see the [desktop liberation site](http://ramblings.mcpher.com/Home/excelquirks/ephemeralexchange/appsscriptlibrary "desktop liberation")
 you can see [library and dependency information here](dependencies.md)
 
-Now update manually with details of this project - this skeleton file is committed only when there is no README.md in the repo.
+This is the Apps Script library for Ephemeral exchange. For the API home and tutorial see (https://storage.googleapis.com/effex-console-static/bundle/index.html "here")
