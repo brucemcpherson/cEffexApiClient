@@ -4,7 +4,7 @@ function testEfx() {
   var efx = EffexApiClient.setProd().setVerbose(true);
   
   // boss key comes from console /// replace this with your own
-  var bossKey ="bx-----------------";  
+  var bossKey ="bx2ao-1qw-b74i7saaoc26";  
   
   // check service is up
   var result = efx.ping();
@@ -149,6 +149,32 @@ function testEfx() {
   // check the underlying is gone
   var result = efx.read (alias.alias, keys.writer);
   assure ( !result.ok,"read-should-fail", result);  
+  
+  // write some data as an alias
+  var walias = efx.writeAlias (textData , "yetanotheralias", keys.writer, "POST" , {readers:keys.reader,updaters:keys.updater});
+  assure ( walias.ok,"writealias", walias); 
+  
+  // make sure ee can read with them all
+  var result = efx.read (walias.alias);
+  assure ( result && result.ok && result.value===textData,"read-writealias-reader", result);
+  
+  // make sure ee can read with them all
+  var result = efx.read (walias.alias, keys.writer);
+  assure ( result && result.ok && result.value===textData,"read-writealias-writekey", result);
+ 
+  var result = efx.read (walias.alias, keys.updater);
+  assure ( result && result.ok && result.value===textData,"read-writealias-updater", result);
+  
+  var result = efx.update ("rubbish", walias.alias);
+  assure ( result && result.ok,"update-writealias-updater", result);
+  
+  // now this should work
+  var result = efx.remove (walias.alias);
+  assure ( result && result.ok ,"remove-writealias", result);
+  
+  // check the underlying is gone
+  var result = efx.read (walias.alias, keys.writer);
+  assure ( !result.ok,"read-writealias-should-fail", result);    
   
 }
 
