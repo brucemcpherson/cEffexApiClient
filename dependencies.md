@@ -1,5 +1,5 @@
 # Google Apps Script Project: cEffexApiClient
-This repo (cEffexApiClient) was automatically updated on 05 March 2017 10:50:19 GMT by GasGit
+This repo (cEffexApiClient) was automatically updated on 27 March 2017 13:54:05 BST by GasGit
 
 For more information see the [desktop liberation site](http://ramblings.mcpher.com/Home/excelquirks/drivesdk/gettinggithubready "desktop liberation") or [contact me on G+](https://plus.google.com/+BruceMcpherson "Bruce McPherson - GDE")
 ## Details for Apps Script project cEffexApiClient
