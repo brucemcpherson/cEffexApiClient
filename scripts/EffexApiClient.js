@@ -210,6 +210,26 @@ var EffexApiClient =  (function (ns) {
     return ax[method] (url, {data:data}); 
   };
 
+  /**
+  * @param {string} writer the writer key
+  * @param {string} alias the alias 
+  * @param {object} data what to write
+  * @param {string} method the to use (post,get)
+  * @param {object} params the params 
+  * @return {Promise} to the result
+  */
+  ns.writeAlias = function (data, alias, writer, method  , params) {
+    method = (method || "post").toLowerCase();
+    params = params || {};
+    if (!alias) throw 'alias required';
+    
+    if (method === "get") {
+      params = clone(params);
+      params.data = JSON.stringify(data);
+    }
+    var url = "/writer/" + ns.checkKey("writer",writer) +"/alias/" + alias + makeParams(params);
+    return ax[method] (url, {data:data}); 
+  };
   
   ns.checkKey = function (type, value) {
     var k=  value || keys[type];
