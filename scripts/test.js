@@ -46,6 +46,7 @@ function testEfx() {
   
   //---reading and writing
   var someData = {name:'xyz',a:[1,2,3],b:2000};
+  var otherTextData = 'anything at all';
   
   var data = efx.write(someData);
   assure ( data && data.ok ,"write-post", data);
@@ -64,6 +65,7 @@ function testEfx() {
  
   // now do all that with some text data
   var textData = "some text data";
+  var yetAlias = "mickymouse"
   
   var data = efx.write(textData);
   assure ( data && data.ok ,"write-post-text", data);
@@ -151,7 +153,7 @@ function testEfx() {
   assure ( !result.ok,"read-should-fail", result);  
   
   // write some data as an alias
-  var walias = efx.writeAlias (textData , "yetanotheralias", keys.writer, "POST" , {readers:keys.reader,updaters:keys.updater});
+  var walias = efx.writeAlias (textData , yetAlias, keys.writer, "POST" , {readers:keys.reader,updaters:keys.updater});
   assure ( walias.ok,"writealias", walias); 
   
   // make sure ee can read with them all
@@ -165,18 +167,81 @@ function testEfx() {
   var result = efx.read (walias.alias, keys.updater);
   assure ( result && result.ok && result.value===textData,"read-writealias-updater", result);
   
-  var result = efx.update ("rubbish", walias.alias);
+  var result = efx.update (otherTextData, walias.alias);
   assure ( result && result.ok,"update-writealias-updater", result);
   
-  // now this should work
-  var result = efx.remove (walias.alias);
-  assure ( result && result.ok ,"remove-writealias", result);
+
+  //'write post'
+  var writePost = efx.write(textData,keys.writer,"post", {
+    updaters: keys.updater,
+    readers: keys.reader
+  });
+  assure (writePost && writePost.ok,'write post', writePost); 
   
-  // check the underlying is gone
-  var result = efx.read (walias.alias, keys.writer);
-  assure ( !result.ok,"read-writealias-should-fail", result);    
+  //'read with intent'
+  var intentRead = efx.read(writePost.id,keys.updater,{
+    intention:"update"
+  });
+  assure (intentRead && intentRead.ok && textData === intentRead.value,'read with intent', intentRead);
+  
+  //'intervening read with no intent'
+  var result = efx.read(writePost.id,keys.updater);
+  assure (result && result.ok && textData === result.value,'intervening read with no intent', result);
+  
+  //'validate intent key not expired'
+  var result = efx.validateKey(intentRead.intent);
+  assure (result && result.ok ,'validate intent key not expired', result);
+  
+ //'update intent - should fail - using a different key'
+  var result = efx.update(otherTextData, writePost.id , keys.writer, "post" , {
+    intent:intentRead.intent
+  });
+  assure (result && !result.ok && result.code === 409,'update intent - should fail - using a different key', result);
+  
+  //'update intent - should fail - using an invalid key'
+  var result = efx.update(otherTextData, writePost.id , keys.updater, "post" , {
+    intent:"rubbish"
+  });
+  assure (result && !result.ok && result.code === 409,'update intent - should fail - using an invalid key', result);
+  
+  //'update intent - should fail - using the same key, but no intent'
+  var result = efx.update(otherTextData, writePost.id , keys.updater);
+  assure (result && !result.ok && result.code === 409,'update intent - should fail - using the same key, but no intent', result);
+  
+  //'update intent - should succeed - using the same key plus intent'
+  var result = efx.update(someData, writePost.id , keys.updater, "post" , {
+    intent:intentRead.intent
+  });
+  assure (result && result.ok,'update intent - should succeed - using the same key plus intent', result);
+  
+  //'update intent - check what was updated'
+  var result = efx.read(writePost.id);
+  assure (result && result.ok && JSON.stringify(someData) === JSON.stringify(result.value),'update intent - check what was updated', result);
+    
+  //'read writealias with writer - and set intent'
+  var intentAlias = efx.read(walias.alias,keys.writer,{
+    intention:"update"
+  });
+  assure (intentAlias && intentAlias.ok && otherTextData === intentAlias.value,'read writealias with writer - and set intent', intentAlias);
+  
+  //'update intent with alias - should succeed - using the same key plus intent'
+  var result = efx.update(textData, intentAlias.alias , keys.writer, "post" , {
+    intent:intentAlias.intent
+  });
+  assure (result && result.ok,'update intent - should succeed - using the same key plus intent', result);
+  
+  //'update intent with alias - should fail - because intent is used up'
+  var result = efx.update(textData, intentAlias.alias , keys.writer, "post" , {
+    intent:intentAlias.intent
+  });
+  assure (result && !result.ok && result.code === 409,'update intent with alias - should fail - because intent is used up', result);
+  
   
 }
+
+
+
+
 
 
 function assure (b , message , result) {
