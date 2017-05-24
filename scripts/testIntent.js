@@ -1,10 +1,10 @@
 function tin() {
  
   // set up client 
- var efx = EffexApiClient;
+ var efx = EffexApiClient.setDev().setVerbose(false);
   
  // boss key comes from console /// replace this with your own
- var bossKey ="bx2be-4fe-egoeibbk21k1";
+ var bossKey ="bx1f9-zb1hg-44ov1bj19f92";
 
 
  //Check service is up
@@ -40,8 +40,6 @@ function tin() {
   var result = efx.update ("some more data", id, writer);
   if (result.ok) throw 'should have blocked update';
   
-  // take a look at the result
-  Logger.log(result);  
   
   // if you want to wait till its available
   //Utilities.sleep (result.intentExpires * 1000 );
@@ -55,5 +53,16 @@ function tin() {
   if (!result.ok) throw 'problem with intention updating :' + result.error;
   
   
+  // .. take an intent  
+  var result = efx.read (id, writer, {intention:"update"});
+  if (!result.ok) throw 'problem with intention reading :' + result.error;
+  
+  // .. and again but expbackoff
+  var r = efx.read (id, writer, {intention:"update"});
+  if (r.ok) throw 'should have failed problem with intention reading :' + r.error;
+  
+  // .. exp backoff
+  var r = efx.read (id, writer, {intention:"update",backoff:true});
+  if (!r.ok) throw 'should have waited for the other to expires:' + r.error;
 }
 
