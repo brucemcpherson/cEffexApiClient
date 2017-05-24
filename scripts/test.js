@@ -1,10 +1,10 @@
 function testEfx() {
   
   // set up client 
-  var efx = EffexApiClient.setProd().setVerbose(true);
+  var efx = EffexApiClient.setProd().setVerbose(false);
   
   // boss key comes from console /// replace this with your own
-  var bossKey ="bx2ao-1qw-b74i7saaoc26";  
+  var bossKey ="bx2ao-leru1m9-btmcq2yaoj2b";  
   
   // check service is up
   var result = efx.ping();
@@ -42,7 +42,9 @@ function testEfx() {
     reader:readers.keys[0]
   });
   // more convenient for later
-  var keys = efx.getKeys();
+  // or just use makeKeys
+  var keys = efx.makeKeys (bossKey , {seconds:5*60});
+  assure ( keys  ,"makekeys", keys);
   
   //---reading and writing
   var someData = {name:'xyz',a:[1,2,3],b:2000};
@@ -196,17 +198,17 @@ function testEfx() {
   var result = efx.update(otherTextData, writePost.id , keys.writer, "post" , {
     intent:intentRead.intent
   });
-  assure (result && !result.ok && result.code === 409,'update intent - should fail - using a different key', result);
+  assure (result && !result.ok && result.code === 423,'update intent - should fail - using a different key', result);
   
   //'update intent - should fail - using an invalid key'
   var result = efx.update(otherTextData, writePost.id , keys.updater, "post" , {
     intent:"rubbish"
   });
-  assure (result && !result.ok && result.code === 409,'update intent - should fail - using an invalid key', result);
+  assure (result && !result.ok && result.code === 400,'update intent - should fail - using an invalid key', result);
   
   //'update intent - should fail - using the same key, but no intent'
   var result = efx.update(otherTextData, writePost.id , keys.updater);
-  assure (result && !result.ok && result.code === 409,'update intent - should fail - using the same key, but no intent', result);
+  assure (result && !result.ok && result.code === 423,'update intent - should fail - using the same key, but no intent', result);
   
   //'update intent - should succeed - using the same key plus intent'
   var result = efx.update(someData, writePost.id , keys.updater, "post" , {
@@ -234,7 +236,7 @@ function testEfx() {
   var result = efx.update(textData, intentAlias.alias , keys.writer, "post" , {
     intent:intentAlias.intent
   });
-  assure (result && !result.ok && result.code === 409,'update intent with alias - should fail - because intent is used up', result);
+  assure (result && !result.ok && result.code === 410,'update intent with alias - should fail - because intent is used up', result);
   
   
 }
@@ -243,8 +245,7 @@ function testEfx() {
 
 
 
-
-function assure (b , message , result) {
+function assurex (b , message , result) {
   verbose = true;
   if (!b) {
     Logger.log ("failed:"+message + ' : result : ' + (result ? JSON.stringify(result) : ""));
