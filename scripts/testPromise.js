@@ -2,11 +2,11 @@
 function testEfxPromise() {
   
   // set up client 
-  var efx = EffexApiClient.setDev().setVerbose(true);
+  var efx = EffexApiClient.setFb().setVerbose(true);
   efx.setPromiseMode (true).setNodeMode (true);
   
   // boss key comes from console /// replace this with your own
-  var bossKey ="bx2ao-leru1m9-btmcq2yaoj2b";  
+  var bossKey ="bx490-tlvauk1-4106o9401c4j";  
   //---reading and writing
   var someData = {name:'xyz',a:[1,2,3],b:2000};
   var otherTextData = 'anything at all';
