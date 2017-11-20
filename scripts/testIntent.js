@@ -1,10 +1,10 @@
 function tin() {
  
   // set up client 
- var efx = EffexApiClient.setDev().setVerbose(false);
+ var efx = EffexApiClient.setFb().setVerbose(false);
   
  // boss key comes from console /// replace this with your own
- var bossKey ="bx1f9-zb1hg-44ov1bj19f92";
+  var bossKey ="bx490-tlvauk1-4106o9401c4j";  
 
 
  //Check service is up
@@ -60,9 +60,11 @@ function tin() {
   // .. and again but expbackoff
   var r = efx.read (id, writer, {intention:"update"});
   if (r.ok) throw 'should have failed problem with intention reading :' + r.error;
+
   
   // .. exp backoff
   var r = efx.read (id, writer, {intention:"update",backoff:true});
-  if (!r.ok) throw 'should have waited for the other to expires:' + r.error;
+  if (!r.ok) throw 'should have waited for intent :' + JSON.stringify(r);
+
 }
 
