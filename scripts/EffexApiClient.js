@@ -2,13 +2,15 @@
 /**
 * basic rough driver for effex api
 * @namespace EffexApiClient
-* v1.3.0
+* v2.0.0
 */
 var EffexApiClient =  (function (ns) {
   
   var DEBUG = 'https://nodestuff-xlibersion.c9users.io';
   var DEV = 'https://s-dev-dot-ephex-auth.appspot.com';
   var PROD = 'https://ephex-auth.appspot-preview.com';
+  //var FB = 'https://us-central1-effex-fb.cloudfunctions.net/efxfb';
+  var FB = 'https://efxapi.com/v2';
   
   // generate a unique number for the session id
   var session = Math.round(Math.random() * 2048).toString(32) + new Date().getTime().toString(32);
@@ -206,6 +208,10 @@ var EffexApiClient =  (function (ns) {
   
   ns.setDebug = function () {
     return ns.setBase (DEBUG);
+  };
+  
+   ns.setFb = function () {
+    return ns.setBase (FB);
   };
   
   ns.setVerbose = function (verbose) {
@@ -517,7 +523,7 @@ var EffexApiClient =  (function (ns) {
             .then(function(result) {
               // store what happened for later
               lastResult = result;
-
+              
               // pass the result to the retry checker and wait a bit and go again if required
               if (doRetry(lastResult, passes++)) {
                 return ns.handyTimer(expTime)
