@@ -1,10 +1,10 @@
 function testEfx() {
   
   // set up client 
-  var efx = EffexApiClient.setProd().setVerbose(false);
+  var efx = EffexApiClient.setFb().setVerbose(false);
   
   // boss key comes from console /// replace this with your own
-  var bossKey ="bx2ao-leru1m9-btmcq2yaoj2b";  
+  var bossKey ="bx490-tlvauk1-4106o9401c4j";  
   
   // check service is up
   var result = efx.ping();
