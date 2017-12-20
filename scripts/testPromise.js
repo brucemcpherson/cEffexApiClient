@@ -2,7 +2,7 @@
 function testEfxPromise() {
   
   // set up client 
-  var efx = EffexApiClient.setFb().setVerbose(true);
+  var efx = EffexApiClient.setProd().setVerbose(true);
   efx.setPromiseMode (true).setNodeMode (true);
   
   // boss key comes from console /// replace this with your own
