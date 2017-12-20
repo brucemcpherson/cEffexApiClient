@@ -2,15 +2,15 @@
 /**
 * basic rough driver for effex api
 * @namespace EffexApiClient
-* v2.0.0
+* v2.3.2
 */
 var EffexApiClient =  (function (ns) {
   
-  var DEBUG = 'https://nodestuff-xlibersion.c9users.io';
-  var DEV = 'https://s-dev-dot-ephex-auth.appspot.com';
-  var PROD = 'https://ephex-auth.appspot-preview.com';
-  //var FB = 'https://us-central1-effex-fb.cloudfunctions.net/efxfb';
+
   var FB = 'https://efxapi.com/v2';
+  var PROD = 'https://effex-fb.firebaseapp.com/v2';
+  var DEBUG = FB;
+  var DEV = FB;
   
   // generate a unique number for the session id
   var session = Math.round(Math.random() * 2048).toString(32) + new Date().getTime().toString(32);
@@ -203,6 +203,7 @@ var EffexApiClient =  (function (ns) {
   };
   
   ns.setProd = function () {
+    // fb is now prod
     return ns.setBase (PROD);
   };
   
@@ -247,6 +248,7 @@ var EffexApiClient =  (function (ns) {
                           var result = ns.generateKey (boss, c, params);
                           if (!result.ok) throw 'failed to generate key ' + JSON.stringify(result);
                           p[c] = result.keys[0];
+              
                           return p;
                         },{}))
       promiseMode = p;
@@ -288,7 +290,7 @@ var EffexApiClient =  (function (ns) {
   * @return {Promise} to the result
   */
   ns.generateKey = function (boss, mode,params) {
-    return ax.get ('/' + boss  + '/' + mode + makeParams(params));
+    return ax.get ('/generate/' + boss  + '/' + mode + makeParams(params));
   };
   
   /**
@@ -344,6 +346,7 @@ var EffexApiClient =  (function (ns) {
   * @return {Promise} to the result
   */
   ns.write = function (data, writer, method  , params) {
+   
     method = (method || "post").toLowerCase();
     params = params || {};
     
