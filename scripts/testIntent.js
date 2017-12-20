@@ -1,7 +1,7 @@
 function tin() {
  
   // set up client 
- var efx = EffexApiClient.setFb().setVerbose(false);
+ var efx = EffexApiClient.setProd().setVerbose(false);
   
  // boss key comes from console /// replace this with your own
   var bossKey ="bx490-tlvauk1-4106o9401c4j";  
