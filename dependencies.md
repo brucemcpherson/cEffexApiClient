@@ -1,5 +1,5 @@
 # Google Apps Script Project: cEffexApiClient
-This repo (cEffexApiClient) was automatically updated on 20 December 2017 13:07:01 GMT by GasGit
+This repo (cEffexApiClient) was automatically updated on 31 October 2018 11:43:24 GMT by GasGit
 
 For more information see the [desktop liberation site](http://ramblings.mcpher.com/Home/excelquirks/drivesdk/gettinggithubready "desktop liberation") or [contact me on G+](https://plus.google.com/+BruceMcpherson "Bruce McPherson - GDE")
 ## Details for Apps Script project cEffexApiClient
@@ -14,11 +14,14 @@ test| server_js
 testIntent| server_js
 Promise| server_js
 testPromise| server_js
+appsscript| json
 ### Directly referenced libraries
 no libraries discovered
 ### All dependencies and sub dependencies
 no libraries discovered
 ### Enabled Google Services
 no libraries discovered
-###Need more detail ?
+### Scopes required
+no scopes discovered
+### Need more detail ?
 You can see [full project info as json here](info.json)
